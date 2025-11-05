@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wiki Unidades Únicas - Age of Empires II</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #1c1c1c;
+      color: white;
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    #galeria {
+      width: 45%;
+      padding: 20px;
+      margin: 10px;
+      box-sizing: border-box;
+      position: relative;
+      border: 3px solid #444;
+      border-radius: 10px;
+      background-image: url('Imagenes/Pergamino.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    .unidad {
+      position: absolute;
+      width: 45%;
+      height: 30%;
+      max-width: 220px;
+      max-height: 220px;
+      border: 2px solid #555;
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: pointer;
+      background-color: rgba(255, 248, 225, 0.85);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .unidad span {
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      font-size: 20px;
+      font-weight: bold;
+      color: white;
+    }
+
+    .unidad:nth-child(1) { top: 5%; left: 5%; }
+    .unidad:nth-child(2) { top: 5%; right: 5%; }
+    .unidad:nth-child(3) { top: 35%; left: 5%; }
+    .unidad:nth-child(4) { top: 35%; right: 5%; }
+    .unidad:nth-child(5) { bottom: 5%; left: 5%; }
+    .unidad:nth-child(6) { bottom: 5%; right: 5%; }
+
+    .unidad img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      border-radius: 10px;
+    }
+
+    #panel-info {
+      flex: 1;
+      padding: 30px;
+      background-color: #1c1c1c;
+      box-sizing: border-box;
+      overflow-y: auto;
+    }
+
+    #panel-info h1 { color: #ffcc00; margin-bottom: 10px; }
+    #panel-info h3 { color: #bbb; margin-top: 0; }
+
+    #panel-info .stats {
+      margin-top: 15px;
+      background-color: #2b2b2b;
+      padding: 15px;
+      border-radius: 10px;
+    }
+    #panel-info .stats p { margin: 8px 0; }
+
+    #mensaje-inicial {
+      text-align: center;
+      color: #aaa;
+      margin-top: 150px;
+    }
+
+    #btn-quiz, #btn-reintentar {
+      margin-top: 20px;
+      padding: 10px 15px;
+      font-weight: bold;
+      background-color: #ffcc00;
+      color: black;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #btn-quiz:hover, #btn-reintentar:hover { background-color: #ffaa00; }
+  </style>
+</head>
+<body>
+
+  <div id="galeria">
+    <div class="unidad" data-nombre="Guerrero Jaguar" data-civ="Aztecas" data-ataque="10 (+8 vs infantería)" data-armadura="1/1" 
+    data-rango="Cuerpo a cuerpo" data-velocidad="1.0" data-descripcion="El guerrero jaguar es probablemente el guerrero azteca más famoso,
+     en la vida real estos guerreros estaban fuertemente armados y blindados, incluso más que el Guerrero Águila. Su papel fue probablemente la infantería pesada del ejército.">
+      <img src="Imagenes/GuerreroJ.jpg" alt="Guerrero Jaguar">
+      <span>1</span>
+    </div>
+
+    <div class="unidad" data-nombre="Catafracta" data-civ="Bizantinos" data-ataque="9 (+9 vs infantería)" data-armadura="2/1"
+     data-rango="Cuerpo a cuerpo" data-velocidad="1.35" data-descripcion="Debido a su daño arrollador, sus buenas estadísticas, y la bonificación 
+     contra infantería, la Catafracta es probablemente la unidad con la cantidad de debilidades menores. Sorprendentemente, 
+     son eficaces contra casi todas las unidades que disponen de ataque adicional contra unidades montadas como los Jinetes a camello pesado, Camellos 
+     imperiales o Mamelucos, ya que tienen una resistencia innata a la bonificación contra caballería.">
+      <img src="Imagenes/Catafracta.jpg" alt="Catafracta">
+      <span>2</span>
+    </div>
+
+    <div class="unidad" data-nombre="Barco Tortuga" data-civ="Coreanos" data-ataque="50" data-armadura="8/8"
+     data-rango="6" data-velocidad="0.7" data-descripcion="El barco tortuga es una de las principales ventajas de Corea. Un solo barco tortuga
+      puede acabar con una pequeña flota de barcos enemigos. Cuando se enfrentan con ellos, la idea más sabia es la construcción de Buques de Demolición
+     Pesados y utilizarlos para atacar a los barcos tortuga, ya que sólo son buenos contra los barcos destinados a sobrevivir">
+      <img src="Imagenes/BarcoT.jpg" alt="Barco Tortuga">
+      <span>3</span>
+    </div>
+
+    <div class="unidad" data-nombre="Arquero De Ratán" data-civ="Vietnamitas" data-ataque="7" data-armadura="0/6" 
+    data-rango="5" data-velocidad="0.96" data-descripcion="El Arquero de Ratán es sumamente eficaz en combate contra arqueros debido a su
+     alta armadura anti-proyectil, comparable con la del Huscarle, su buen daño para ser arquero y su velocidad, que es la segunda más rápida entre los arqueros a pie,
+      después de la del Arquero de las Plumas.">
+      <img src="Imagenes/ArqueroR.jpg" alt="Arquero De Ratán">
+      <span>4</span>
+    </div>
+
+    <div class="unidad" data-nombre="Samurái" data-civ="Japoneses" data-ataque="8 (+10 vs UU)" data-armadura="1/1"
+     data-rango="Cuerpo a cuerpo" data-velocidad="1.0" data-descripcion="Los Samurái buscan activamente el más fuerte entre 
+     las filas del enemigo y poseen una ventaja de ataque contra otras unidades únicas. Al igual que todas las unidades únicas, 
+     los Samurái se puede actualizar a versiones de élite de sí mismos y tiene mejores estadísticas que el normal.">
+      <img src="Imagenes/Samurai.jpg" alt="Samurái">
+      <span>5</span>
+    </div>
+
+    <div class="unidad" data-nombre="Arquero De Arco Largo" data-civ="Britones" data-ataque="6" data-armadura="0/1"
+     data-rango="7" data-velocidad="0.96" data-descripcion="En grandes cantidades, el arquero de tiro largo puede resultar especialmente 
+     letal al echar abajo las unidades más robustas y las mayores de las fuerzas. Si el jugador suma una línea de infantería al frente para 
+     crear confusión a las unidades enemigas y alguna caballería ligera para destruir rápidamente las catapultas, el arquero de tiro largo puede permanecer intacto, 
+     mientras elimina montones de tropas enemigas.">
+      <img src="Imagenes/ArqueroArcoLargo.jpg" alt="Arquero De Arco Largo">
+      <span>6</span>
+    </div>
+  </div>
+
+  <div id="panel-info">
+    <div id="mensaje-inicial">
+      <h2>Selecciona una unidad única para ver sus estadísticas</h2>
+    </div>
+
+    <button id="btn-quiz">Realizar Quiz</button>
+    <button id="btn-reintentar" style="display:none;">Reintentar Quiz</button>
+  </div>
+
+  <script>
+    const unidades = document.querySelectorAll('.unidad');
+    const panel = document.getElementById('panel-info');
+
+    unidades.forEach(u => {
+      u.addEventListener('click', () => {
+        const nombre = u.dataset.nombre;
+        const civ = u.dataset.civ;
+        const ataque = u.dataset.ataque;
+        const armadura = u.dataset.armadura;
+        const rango = u.dataset.rango;
+        const velocidad = u.dataset.velocidad;
+        const descripcion = u.dataset.descripcion;
+        const imgSrc = u.querySelector('img').src;
+
+        panel.innerHTML = `
+          <h1>${nombre}</h1>
+          <h3>${civ}</h3>
+          <img src="${imgSrc}" alt="${nombre}" width="220px" style="border-radius:10px; margin-bottom:10px;">
+          <div class="stats">
+            <p><strong>Ataque:</strong> ${ataque}</p>
+            <p><strong>Armadura:</strong> ${armadura}</p>
+            <p><strong>Rango:</strong> ${rango}</p>
+            <p><strong>Velocidad:</strong> ${velocidad}</p>
+            <p><strong>Descripción:</strong> ${descripcion}</p>
+          </div>
+          <button id="btn-quiz">Realizar Quiz</button>
+          <button id="btn-reintentar" style="display:none;">Reintentar Quiz</button>
+        `;
+
+        enlazarQuiz();
+      });
+    });
+
+    const preguntas = [
+      {pregunta: "¿Cuál es la unidad única azteca?", respuesta: "Guerrero Jaguar"},
+      {pregunta: "¿Cuál es la unidad única vietnamita?", respuesta: "Arquero de Ratan"},
+      {pregunta: "¿Cuál es la unidad única bizantina?", respuesta:"Catafracta"},
+      {pregunta: "¿Cuál es la unidad única inglesa?", respuesta:"Arquero de Arco Largo"},
+      {pregunta: "¿Cuál es la unidad única naval coreana?", respuesta:"Barco Tortuga"},
+      {pregunta: "¿Cuál es la unidad única japonesa?", respuesta:"Samurai"},
+      {pregunta: "Unidad que busca activamente al mas fuerte en filas enemigas", respuesta:"Samurai"},
+      {pregunta: "Es un arquero muy eficaz contra otros arqueros", respuesta:"Arquero de Ratan"},
+      {pregunta: "Una sola unidad de este tipo es capaz de hundir flotillas enteras de barcos", respuesta:"Barco Tortuga"},
+      {pregunta: "Son eficaces contra casi todas las unidades que disponen de ataque adicional contra unidades montadas", respuesta:"Catafracta"}
+    ];
+
+    function normalizarTexto(texto) {
+      return texto
+        ? texto.trim()
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+        : "";
+    }
+
+    function enlazarQuiz(){
+      const btnQuiz = document.getElementById('btn-quiz');
+      const btnReintentar = document.getElementById('btn-reintentar');
+
+      btnQuiz.onclick = () => {
+        let puntaje = 0;
+        btnQuiz.style.display = 'none';
+
+        for(let i=0;i<preguntas.length;i++){
+          let resp = prompt(preguntas[i].pregunta);
+          if(normalizarTexto(resp) === normalizarTexto(preguntas[i].respuesta)){
+            puntaje++;
+            alert("¡Correcto!");
+          } else {
+            alert(`Incorrecto. La respuesta correcta es: ${preguntas[i].respuesta}`);
+          }
+        }
+
+        alert(`Tu puntaje: ${puntaje} / ${preguntas.length}`);
+        if(puntaje < preguntas.length){
+          btnReintentar.style.display = 'inline-block';
+        } else {
+          btnQuiz.style.display = 'inline-block';
+        }
+      };
+
+      btnReintentar.onclick = () => {
+        btnReintentar.style.display = 'none';
+        btnQuiz.click();
+      };
+    }
+
+    enlazarQuiz();
+  </script>
+</body>
+</html>

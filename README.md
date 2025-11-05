@@ -1,1 +1,1 @@
-Bienvenido a mi nteractivo sobre Las partes de un auto
+Bienvenido a mi interactivo sobre Las partes de un auto

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Partes del Auto Interactivo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    .auto-container {
+      position: relative;
+      max-width: 600px;
+      margin: auto;
+    }
+    img.auto {
+      width: 100%;
+      display: block;
+    }
+    .marker {
+      position: absolute;
+      background: red;
+      color: white;
+      font-weight: bold;
+      width: 20px;
+      height: 20px;
+      text-align: center;
+      line-height: 20px;
+      border-radius: 50%;
+      cursor: pointer;
+      user-select: none;
+    }
+    #info {
+      margin-top: 20px;
+      padding: 10px;
+      border: 2px solid #333;
+      min-height: 100px;
+      background-color: #f9f9f9;
+    }
+    #retry-btn {
+      display: none;
+      margin-top: 20px;
+      padding: 10px 15px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Piezas Interactivas del Auto</h1>
+  <div class="auto-container">
+    <img class="auto" src="imagen_carro.png" alt="Auto" />
+    <div class="marker" style="top: 70%; left: 15%;" data-piece="Rueda Delantera">+</div>
+    <div class="marker" style="top: 70%; left: 75%;" data-piece="Rueda Trasera">+</div>
+    <div class="marker" style="top: 45%; left: 50%;" data-piece="Motor">+</div>
+    <div class="marker" style="top: 30%; left: 35%;" data-piece="Puerta Delantera">+</div>
+    <div class="marker" style="top: 50%; left: 70%;" data-piece="Puerta Trasera">+</div>
+    <div class="marker" style="top: 20%; left: 50%;" data-piece="Carrocería">+</div>
+  </div>
+  <div id="info">Haz clic en una cruz (+) para ver información sobre la pieza.</div>
+
+  <button id="retry-btn">Reintentar Quiz</button>
+
+  <script>
+    var infoBox = document.getElementById('info');
+    var markers = document.querySelectorAll('.marker');
+    var clickedPieces = {};
+    var retryBtn = document.getElementById('retry-btn');
+
+    var infoData = {
+      'Rueda Delantera': 'La rueda delantera soporta parte del peso del auto y permite la dirección.',
+      'Rueda Trasera': 'La rueda trasera ayuda a la tracción y estabilidad del vehículo.',
+      'Motor': 'El motor convierte el combustible en energía para mover el auto.',
+      'Puerta Delantera': 'La puerta delantera permite entrar y salir del auto por delante.',
+      'Puerta Trasera': 'La puerta trasera da acceso a los asientos traseros del auto.',
+      'Carrocería': 'La carrocería es la estructura exterior que protege el interior y da forma al auto.'
+    };
+
+    var questions = [
+      {q: "1. ¿Cuál es la función principal del motor?", options: ["A) Sostener el vehículo", "B) Proporcionar energía para mover el auto", "C) Abrir las puertas"], correct: "B) Proporcionar energía para mover el auto" },
+      {q: "2. ¿Qué pieza protege el interior del auto y su estructura?", options: ["A) Carrocería", "B) Motor", "C) Ruedas"], correct: "A) Carrocería" },
+      {q: "3. ¿Qué parte se usa para entrar y salir del auto?", options: ["A) Puertas", "B) Motor", "C) Carrocería"], correct: "A) Puertas" },
+      {q: "4. ¿Qué pieza hace contacto con el suelo para que el auto se mueva?", options: ["A) Ruedas", "B) Motor", "C) Puertas"], correct: "A) Ruedas" },
+      {q: "5. ¿Cuál pieza está ubicada en la parte frontal del auto y contiene el motor?", options: ["A) Carrocería", "B) Capó (motor)", "C) Ruedas"], correct: "B) Capó (motor)" },
+      {q: "6. ¿Verdadero o falso? La carrocería es la parte que protege a los pasajeros.", options: ["A) Verdadero", "B) Falso"], correct: "A) Verdadero" },
+      {q: "7. ¿Qué pieza se puede abrir para entrar en el auto?", options: ["A) Ruedas", "B) Puertas", "C) Motor"], correct: "B) Puertas" },
+      {q: "8. ¿Cómo se llama la parte que conecta el motor con las ruedas?", options: ["A) Eje", "B) Carrocería", "C) Asiento"], correct: "A) Eje" },
+      {q: "9. ¿Qué pieza no forma parte del motor?", options: ["A) Puertas", "B) Bujías", "C) Cilindros"], correct: "A) Puertas" },
+      {q: "10. ¿Qué parte está más cerca del conductor para controlar el auto?", options: ["A) Volante", "B) Motor", "C) Ruedas"], correct: "A) Volante" }
+    ];
+
+    function showInfo(piece) {
+      infoBox.textContent = infoData[piece];
+      clickedPieces[piece] = true;
+      if(Object.keys(clickedPieces).length === markers.length) {
+        startQuiz();
+      }
+    }
+
+    function startQuiz() {
+      var score = 0;
+      alert("¡Has explorado todas las piezas!\nAhora vamos a hacer un quiz.");
+      for (var i = 0; i < questions.length; i++) {
+        var item = questions[i];
+        var answer = prompt(item.q + "\n" + item.options.join("\n") + "\nEscribe la letra correcta (A, B o C):");
+        if (answer) {
+          answer = answer.trim().toUpperCase();
+          var selectedOption = null;
+          if (answer === "A") selectedOption = item.options[0];
+          else if (answer === "B") selectedOption = item.options[1];
+          else if (answer === "C") selectedOption = item.options[2];
+          if (selectedOption === item.correct) {
+            score++;
+          }
+        }
+      }
+      alert("Has respondido correctamente " + score + " de " + questions.length + " preguntas.");
+      if (score < questions.length) {
+        retryBtn.style.display = "inline-block";
+      } else {
+        retryBtn.style.display = "none";
+      }
+    }
+
+    markers.forEach(function(marker){
+      marker.addEventListener('click', function() {
+        var pieza = marker.getAttribute('data-piece');
+        showInfo(pieza);
+      });
+    });
+
+    retryBtn.onclick = function() {
+      retryBtn.style.display = 'none';
+      clickedPieces = {};
+      infoBox.textContent = "Haz clic en una cruz (+) para ver información sobre la pieza.";
+    };
+  </script>
+</body>
+</html>

@@ -154,6 +154,39 @@
       font-size: 12px;
       color: #666;
     }
+    /* Estilos para modal de imagen */
+    .image-modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.9);
+    }
+    .image-modal-content {
+      margin: auto;
+      display: block;
+      max-width: 70%;
+      max-height: 70%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .close {
+      position: absolute;
+      top: 20px;
+      right: 35px;
+      color: #f1f1f1;
+      font-size: 40px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .close:hover {
+      color: #ff4444;
+    }
     @media (max-width: 600px) {
       .guestbook-form {
         flex-direction: column;
@@ -166,12 +199,12 @@
   
   <div class="auto-container">
     <img class="auto" src="imagen_carro.png" alt="Auto interactivo" />
-    <div class="marker" style="top: 70%; left: 15%;" data-piece="Rueda Delantera">+</div>
-    <div class="marker" style="top: 70%; left: 75%;" data-piece="Rueda Trasera">+</div>
-    <div class="marker" style="top: 45%; left: 50%;" data-piece="Motor">+</div>
-    <div class="marker" style="top: 30%; left: 35%;" data-piece="Puerta Delantera">+</div>
-    <div class="marker" style="top: 50%; left: 70%;" data-piece="Puerta Trasera">+</div>
-    <div class="marker" style="top: 20%; left: 50%;" data-piece="Carrocería">+</div>
+    <div class="marker" style="top: 70%; left: 15%;" data-piece="Rueda Delantera" data-image="rueda.png"></div>
+    <div class="marker" style="top: 70%; left: 75%;" data-piece="Rueda Trasera" data-image="rueda.png"></div>
+    <div class="marker" style="top: 45%; left: 50%;" data-piece="Motor" data-image="motor1.png"></div>
+    <div class="marker" style="top: 30%; left: 35%;" data-piece="Puerta Delantera" data-image="puertadelantera1.png"></div>
+    <div class="marker" style="top: 50%; left: 70%;" data-piece="Puerta Trasera" data-image="puertatrasera1.png"></div>
+    <div class="marker" style="top: 20%; left: 50%;" data-piece="Carrocería" data-image="carroceria1.png"></div>
   </div>
   
   <div id="info">🖱️ Pasa el mouse sobre las cruces rojas (+) y haz clic para aprender sobre cada pieza del auto.</div>
@@ -188,6 +221,12 @@
     <div id="guestbookList" class="guestbook-list">
       <p style="text-align: center; color: #666; padding: 20px;">No hay mensajes aún. ¡Sé el primero!</p>
     </div>
+  </div>
+
+  <!-- Modal para mostrar imágenes -->
+  <div id="imageModal" class="image-modal">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <img class="image-modal-content" id="modalImage">
   </div>
 
   <script>
@@ -211,9 +250,32 @@
       {q: "1. ¿Cuál es la función principal del motor?", options: ["A) Sostener el vehículo", "B) Proporcionar energía", "C) Abrir puertas"], correct: "B) Proporcionar energía" },
       {q: "2. ¿Qué protege el interior del auto?", options: ["A) Carrocería", "B) Motor", "C) Ruedas"], correct: "A) Carrocería" },
       {q: "3. ¿Para entrar/salir del auto?", options: ["A) Puertas", "B) Motor", "C) Carrocería"], correct: "A) Puertas" },
-      {q: "4. ¿Qué hace contacto con el suelo?", options: ["A) Ruedas", "B) Motor", "C) Puertas"], correct: "A) Ruedas" }
+      {q: "4. ¿Qué hace contacto con el suelo?", options: ["A) Ruedas", "B) Motor", "C) Puertas"], correct: "A) Ruedas" },
+      {q: "5. ¿Qué pieza permite la dirección del auto?", options: ["A) Rueda Trasera", "B) Rueda Delantera", "C) Carrocería"], correct: "B) Rueda Delantera" },
+      {q: "6. ¿Cuál es la función de la carrocería?", options: ["A) Mover el auto", "B) Proteger el interior", "C) Girar"], correct: "B) Proteger el interior" },
+      {q: "7. ¿Qué ayuda en la estabilidad en curvas?", options: ["A) Puerta Delantera", "B) Rueda Trasera", "C) Motor"], correct: "B) Rueda Trasera" },
+      {q: "8. ¿Qué da acceso a los asientos traseros?", options: ["A) Puerta Delantera", "B) Puerta Trasera", "C) Rueda Delantera"], correct: "B) Puerta Trasera" },
+      {q: "9. ¿Qué convierte combustible en energía?", options: ["A) Carrocería", "B) Motor", "C) Puertas"], correct: "B) Motor" },
+      {q: "10. ¿Qué define la forma exterior del auto?", options: ["A) Motor", "B) Carrocería", "C) Ruedas"], correct: "B) Carrocería" }
     ];
 
+    function showImage(imageUrl) {
+      var modal = document.getElementById('imageModal');
+      var modalImg = document.getElementById('modalImage');
+      modal.style.display = 'block';
+      modalImg.src = imageUrl;
+    }
+
+    function closeModal() {
+      document.getElementById('imageModal').style.display = 'none';
+    }
+
+    window.onclick = function(event) {
+      var modal = document.getElementById('imageModal');
+      if (event.target == modal) {
+        modal.style.display = 'none';
+      }
+    }
 
     function showInfo(piece) {
       infoBox.innerHTML = `<strong>${piece}:</strong> ${infoData[piece]}`;
@@ -246,7 +308,9 @@
     markers.forEach(marker => {
       marker.addEventListener('click', () => {
         const pieza = marker.getAttribute('data-piece');
+        const imageUrl = marker.getAttribute('data-image');
         showInfo(pieza);
+        showImage(imageUrl);
         marker.style.background = '#4CAF50';
       });
     });

@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Partes del Auto Interactivo - Con Libro de Visitas</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    .auto-container {
+      position: relative;
+      max-width: 600px;
+      margin: auto;
+    }
+    img.auto {
+      width: 100%;
+      display: block;
+    }
+    .marker {
+      position: absolute;
+      background: #ff4444;
+      color: white;
+      font-weight: bold;
+      width: 24px;
+      height: 24px;
+      text-align: center;
+      line-height: 24px;
+      border-radius: 50%;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    }
+    .marker:hover {
+      background: #ff6666;
+      transform: scale(1.3);
+      box-shadow: 0 4px 12px rgba(255,68,68,0.5);
+      z-index: 10;
+    }
+    .marker::before {
+      content: attr(data-piece);
+      position: absolute;
+      bottom: -30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.8);
+      color: white;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      white-space: nowrap;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      pointer-events: none;
+    }
+    .marker:hover::before {
+      opacity: 1;
+      visibility: visible;
+    }
+    #info {
+      margin-top: 20px;
+      padding: 15px;
+      border: 2px solid #333;
+      min-height: 100px;
+      background-color: #f9f9f9;
+      border-radius: 8px;
+    }
+    #retry-btn {
+      display: none;
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #retry-btn:hover {
+      background: #45a049;
+    }
+   
+
+    .guestbook-section {
+      margin-top: 40px;
+      padding: 20px;
+      border: 2px solid #4CAF50;
+      border-radius: 8px;
+      background: #f0f8f0;
+    }
+    .guestbook-form {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .guestbook-form input, .guestbook-form textarea {
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-family: inherit;
+    }
+    .guestbook-form input {
+      flex: 1;
+      min-width: 200px;
+    }
+    .guestbook-form textarea {
+      flex: 2;
+      min-width: 300px;
+      height: 80px;
+      resize: vertical;
+    }
+    .guestbook-btn {
+      padding: 8px 20px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .guestbook-btn:hover {
+      background: #45a049;
+    }
+    .guestbook-list {
+      max-height: 300px;
+      overflow-y: auto;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      background: white;
+    }
+    .guest-entry {
+      padding: 12px;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    .guest-entry:last-child {
+      border-bottom: none;
+    }
+    .guest-name {
+      font-weight: bold;
+      color: #2c5aa0;
+    }
+    .guest-comment {
+      flex: 1;
+      margin-left: 10px;
+      color: #333;
+    }
+    .guest-date {
+      font-size: 12px;
+      color: #666;
+    }
+    .image-modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.9);
+    }
+    .image-modal-content {
+      margin: auto;
+      display: block;
+      max-width: 70%;
+      max-height: 70%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .close {
+      position: absolute;
+      top: 20px;
+      right: 35px;
+      color: #f1f1f1;
+      font-size: 40px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .close:hover {
+      color: #ff4444;
+    }
+    @media (max-width: 600px) {
+      .guestbook-form {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>🛠️ Piezas Interactivas del Auto</h1>
+ 
+  <div class="auto-container">
+    <img class="auto" src="imagen_carro.png" alt="Auto interactivo" />
+    <div class="marker" style="top: 70%; left: 15%;" data-piece="Rueda Delantera" data-image="rueda.png"></div>
+    <div class="marker" style="top: 70%; left: 75%;" data-piece="Rueda Trasera" data-image="rueda.png"></div>
+    <div class="marker" style="top: 45%; left: 50%;" data-piece="Motor" data-image="motor1.png"></div>
+    <div class="marker" style="top: 30%; left: 35%;" data-piece="Puerta Delantera" data-image="puertadelantera1.png"></div>
+    <div class="marker" style="top: 50%; left: 70%;" data-piece="Puerta Trasera" data-image="puertatrasera1.png"></div>
+    <div class="marker" style="top: 20%; left: 50%;" data-piece="Carrocería" data-image="carroceria1.png"></div>
+  </div>
+ 
+  <div id="info">🖱️ Pasa el mouse sobre las cruces rojas (+) y haz clic para aprender sobre cada pieza del auto.</div>
+  <button id="retry-btn">🔄 Reintentar Quiz</button>
+
+ 
+  <div class="guestbook-section">
+    <h2>📖 Libro de Visitas</h2>
+    <div class="guestbook-form">
+      <input type="text" id="visitorName" placeholder="Tu nombre" maxlength="50" required>
+      <textarea id="visitorComment" placeholder="Deja tu comentario sobre las piezas del auto..." maxlength="500" required></textarea>
+      <button class="guestbook-btn" onclick="saveGuestEntry()">💾 Guardar</button>
+    </div>
+    <div id="guestbookList" class="guestbook-list">
+      <p style="text-align: center; color: #666; padding: 20px;">No hay mensajes aún. ¡Sé el primero!</p>
+    </div>
+  </div>
+
+  <!-- Modal para mostrar imágenes -->
+  <div id="imageModal" class="image-modal">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <img class="image-modal-content" id="modalImage">
+  </div>
+
+  <script>
+
+    var infoData = {
+      'Rueda Delantera': '🔧 La rueda delantera soporta parte del peso del auto y permite la dirección mediante el sistema de dirección.',
+      'Rueda Trasera': '🔧 La rueda trasera ayuda a la tracción y estabilidad del vehículo, especialmente en curvas.',
+      'Motor': '⚙️ El motor convierte el combustible en energía mecánica para mover el auto.',
+      'Puerta Delantera': '🚪 La puerta delantera permite entrar y salir del auto por la parte delantera.',
+      'Puerta Trasera': '🚪 La puerta trasera da acceso a los asientos traseros del vehículo.',
+      'Carrocería': '🏗️ La carrocería es la estructura exterior que protege el interior y define la forma del auto.'
+    };
+
+    var infoBox = document.getElementById('info');
+    var markers = document.querySelectorAll('.marker');
+    var clickedPieces = {};
+    var retryBtn = document.getElementById('retry-btn');
+    var guestbookList = document.getElementById('guestbookList');
+
+    var questions = [
+      {q: "1. ¿Cuál es la función principal del motor?", options: ["A) Sostener el vehículo", "B) Proporcionar energía", "C) Abrir puertas"], correct: "B) Proporcionar energía" },
+      {q: "2. ¿Qué protege el interior del auto?", options: ["A) Carrocería", "B) Motor", "C) Ruedas"], correct: "A) Carrocería" },
+      {q: "3. ¿Para entrar/salir del auto?", options: ["A) Puertas", "B) Motor", "C) Carrocería"], correct: "A) Puertas" },
+      {q: "4. ¿Qué hace contacto con el suelo?", options: ["A) Ruedas", "B) Motor", "C) Puertas"], correct: "A) Ruedas" },
+      {q: "5. ¿Qué pieza permite la dirección del auto?", options: ["A) Rueda Trasera", "B) Rueda Delantera", "C) Carrocería"], correct: "B) Rueda Delantera" },
+      {q: "6. ¿Cuál es la función de la carrocería?", options: ["A) Mover el auto", "B) Proteger el interior", "C) Girar"], correct: "B) Proteger el interior" },
+      {q: "7. ¿Qué ayuda en la estabilidad en curvas?", options: ["A) Puerta Delantera", "B) Rueda Trasera", "C) Motor"], correct: "B) Rueda Trasera" },
+      {q: "8. ¿Qué da acceso a los asientos traseros?", options: ["A) Puerta Delantera", "B) Puerta Trasera", "C) Rueda Delantera"], correct: "B) Puerta Trasera" },
+      {q: "9. ¿Qué convierte combustible en energía?", options: ["A) Carrocería", "B) Motor", "C) Puertas"], correct: "B) Motor" },
+      {q: "10. ¿Qué define la forma exterior del auto?", options: ["A) Motor", "B) Carrocería", "C) Ruedas"], correct: "B) Carrocería" }
+    ];
+
+    function showImage(imageUrl) {
+      var modal = document.getElementById('imageModal');
+      var modalImg = document.getElementById('modalImage');
+      modal.style.display = 'block';
+      modalImg.src = imageUrl;
+    }
+
+    function closeModal() {
+      document.getElementById('imageModal').style.display = 'none';
+    }
+
+    window.onclick = function(event) {
+      var modal = document.getElementById('imageModal');
+      if (event.target == modal) {
+        modal.style.display = 'none';
+      }
+    }
+
+    function showInfo(piece) {
+      infoBox.innerHTML = `<strong>${piece}:</strong> ${infoData[piece]}`;
+      clickedPieces[piece] = true;
+     
+      if(Object.keys(clickedPieces).length === markers.length) {
+        setTimeout(startQuiz, 1000);
+      }
+    }
+
+    function startQuiz() {
+      infoBox.innerHTML = '🎉 ¡Excelente! Has explorado todas las piezas. ¡Ahora el quiz!';
+      setTimeout(() => {
+        let score = 0;
+        for(let i = 0; i < questions.length; i++) {
+          const item = questions[i];
+          const answer = prompt(item.q + '\n' + item.options.join('\n') + '\nEscribe A, B o C:');
+          if(answer && answer.toUpperCase() === item.correct.charAt(0)) {
+            score++;
+          }
+        }
+        const result = `✅ ¡Resultado: ${score}/${questions.length} correctas!`;
+        infoBox.innerHTML = result;
+        if(score < questions.length) {
+          retryBtn.style.display = 'inline-block';
+        }
+      }, 500);
+    }
+
+    markers.forEach(marker => {
+      marker.addEventListener('click', () => {
+        const pieza = marker.getAttribute('data-piece');
+        const imageUrl = marker.getAttribute('data-image');
+        showInfo(pieza);
+        showImage(imageUrl);
+        marker.style.background = '#4CAF50';
+      });
+    });
+
+ 
+    retryBtn.onclick = () => {
+      retryBtn.style.display = 'none';
+      clickedPieces = {};
+      markers.forEach(m => m.style.background = '#ff4444');
+      infoBox.textContent = '🖱️ Pasa el mouse sobre las cruces rojas (+) y haz clic para aprender.';
+    };
+    function getCurrentDate() {
+      return new Date().toLocaleString('es-ES', {
+        year: 'numeric', month: 'short', day: 'numeric',
+        hour: '2-digit', minute: '2-digit'
+      });
+    }
+
+    function saveGuestEntry() {
+      const name = document.getElementById('visitorName').value.trim();
+      const comment = document.getElementById('visitorComment').value.trim();
+     
+      if(!name || !comment) {
+        alert('⚠️ Por favor completa nombre y comentario');
+        return;
+      }
+      const entry = {
+        id: Date.now(),
+        name: name,
+        comment: comment,
+        date: getCurrentDate()
+      };
+
+      let entries = JSON.parse(localStorage.getItem('guestbook') || '[]');
+      entries.unshift(entry);
+      entries = entries.slice(0, 50);
+      localStorage.setItem('guestbook', JSON.stringify(entries));
+     
+      loadGuestbook();
+      document.getElementById('visitorName').value = '';
+      document.getElementById('visitorComment').value = '';
+     
+      alert('✅ ¡Mensaje guardado exitosamente!');
+    }
+
+    function loadGuestbook() {
+      const entries = JSON.parse(localStorage.getItem('guestbook') || '[]');
+      if(entries.length === 0) {
+        guestbookList.innerHTML = '<p style="text-align: center; color: #666; padding: 20px;">No hay mensajes aún. ¡Sé el primero!</p>';
+        return;
+      }
+     
+      guestbookList.innerHTML = entries.map(entry => `
+        <div class="guest-entry">
+          <div>
+            <div class="guest-name">${entry.name}</div>
+            <div class="guest-comment">${entry.comment}</div>
+          </div>
+          <div class="guest-date">${entry.date}</div>
+        </div>
+      `).join('');
+    }
+    loadGuestbook();
+    document.getElementById('visitorComment').addEventListener('keypress', (e) => {
+      if(e.key === 'Enter' && e.ctrlKey) saveGuestEntry();
+    });
+  </script>
+</body>
+</html>
